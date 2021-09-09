@@ -3,6 +3,8 @@ package br.com.bootcampinter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -37,11 +39,26 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHol
     }
 
     /**
+     * Método responsável por trazer uma lista de uma classe externa para dentro do Adapter
+     */
+    fun updateList(list: List<Contact>) {
+        this.list.clear()
+        this.list.addAll(list)
+        // Notifica o Adapter de que a lista utilizada foi atualizada
+        // passando por todos os métodos para popular novamente a lista
+        notifyDataSetChanged()
+    }
+    /**
      * Classe responsável pelo gerenciamento de cada item
      */
     class ContactAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(contact: Contact) {
+        private val tvName: TextView = itemView.findViewById(R.id.tv_name)
+        private val tvPhone: TextView = itemView.findViewById(R.id.tv_phone)
+        private val ivPhotograph: ImageView = itemView.findViewById(R.id.iv_photograph)
 
+        fun bind(contact: Contact) {
+            tvName.text = contact.name
+            tvPhone.text = contact.phone
         }
     }
 }
