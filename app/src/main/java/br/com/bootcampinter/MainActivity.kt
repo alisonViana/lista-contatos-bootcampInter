@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateList() {
         val contact1 = Contact("Alison Viana", "(11)00000-0000", "img.png")
-        val contact2 = Contact("Maria Luiza", "(12) 11111-1111", "img.png")
+        val contact2 = Contact("Maria José", "(12) 11111-1111", "img.png")
 
         adapter.updateList(
             arrayListOf(contact1, contact2)
