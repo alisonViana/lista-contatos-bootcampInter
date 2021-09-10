@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">listaContatos-BootcampInter</string>
     <string name="iv_photo_content_description">Imagem do Contato</string>
+
+    <string name="menu_1">Menu 1</string>
+    <string name="menu_2">Menu 2</string>
 </resources>
