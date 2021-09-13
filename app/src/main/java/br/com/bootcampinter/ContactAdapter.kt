@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Classe responsável por gerenciar a lista de contatos como um todo
  */
-class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHolder>() {
+class ContactAdapter(var listener: ContactItemClickListener) : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHolder>() {
 
     private val list: MutableList<Contact> = mutableListOf()
 
@@ -19,7 +19,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHol
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactAdapterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.contact_item, parent, false)
-        return ContactAdapterViewHolder(view)
+        return ContactAdapterViewHolder(view, listener, list)
     }
 
     /**
@@ -51,14 +51,22 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHol
     /**
      * Classe responsável pelo gerenciamento de cada item
      */
-    class ContactAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ContactAdapterViewHolder(itemView: View, listener: ContactItemClickListener, list: List<Contact>) : RecyclerView.ViewHolder(itemView) {
         private val tvName: TextView = itemView.findViewById(R.id.tv_name)
         private val tvPhone: TextView = itemView.findViewById(R.id.tv_phone)
         private val ivPhotograph: ImageView = itemView.findViewById(R.id.iv_photograph)
 
+        init {
+            itemView.setOnClickListener {
+                listener.onClickItemContact(list[adapterPosition])
+            }
+        }
+
         fun bind(contact: Contact) {
             tvName.text = contact.name
             tvPhone.text = contact.phone
+            ivPhotograph.setImageResource(contact.photograph)
         }
+
     }
 }

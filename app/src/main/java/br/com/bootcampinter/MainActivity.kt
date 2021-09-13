@@ -1,5 +1,6 @@
 package br.com.bootcampinter
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -12,9 +13,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.bootcampinter.DetailActivity.Companion.EXTRA_CONTACT
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ContactItemClickListener {
     /**
      * variável que recebe a RecyclerView
      */
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.rv_list)
     }
 
-    private val adapter = ContactAdapter()
+    private val adapter = ContactAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,26 +36,6 @@ class MainActivity : AppCompatActivity() {
         updateList()
     }
 
-    private fun setNavegationViewListener() {
-        val navView = findViewById<NavigationView>(R.id.nav_view)
-        navView.setNavigationItemSelectedListener{ item ->
-            when(item.itemId){
-                R.id.item_menu_1 -> {
-                    showToast("MENU 1")
-                    true
-                }
-                R.id.item_menu_2 -> {
-                    showToast("MENU 2")
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-    }
-
-
     private fun initDrawer() {
         val drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -64,22 +46,18 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-    }
-
     private fun bindViews() {
         rvList.adapter = adapter
         rvList.layoutManager = LinearLayoutManager(this)
     }
 
     private fun updateList() {
-        val contact1 = Contact("Alison Viana", "(11)00000-0000", "img.png")
-        val contact2 = Contact("Maria José", "(12) 11111-1111", "img.png")
+        val contact1 = Contact("Alison Viana", "(11)00000-0000", R.drawable.male_avatar)
+        val contact2 = Contact("Maria José", "(12) 11111-1111", R.drawable.female_avatar)
+        val contact3 = Contact("Carlos", "(21) 92222-2222")
 
         adapter.updateList(
-            arrayListOf(contact1, contact2)
+            arrayListOf(contact1, contact2, contact3)
         )
     }
 
@@ -92,7 +70,7 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.options_menu, menu)
         return true
     }
 
@@ -108,5 +86,28 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setNavegationViewListener() {
+        val navView = findViewById<NavigationView>(R.id.nav_view)
+        navView.setNavigationItemSelectedListener{ item ->
+            when(item.itemId){
+                R.id.item_menu_1 -> {
+                    showToast("MENU 1")
+                    true
+                }
+                R.id.item_menu_2 -> {
+                    showToast("MENU 2")
+                    true
+                }
+                else -> { false }
+            }
+        }
+    }
+
+    override fun onClickItemContact(contact: Contact) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(EXTRA_CONTACT, contact)
+        startActivity(intent)
     }
 }

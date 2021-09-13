@@ -24,13 +24,14 @@
             android:contentDescription="@string/iv_photo_content_description"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:src="@android:drawable/sym_contact_card"
             tools:src="@tools:sample/avatars"/>
 
         <TextView
             android:id="@+id/tv_name"
             app:layout_constraintTop_toTopOf="@id/iv_photograph"
             app:layout_constraintStart_toEndOf="@id/iv_photograph"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_width="0dp"
@@ -41,7 +42,7 @@
             android:id="@+id/tv_phone"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             app:layout_constraintStart_toEndOf="@id/iv_photograph"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:textSize="14sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
