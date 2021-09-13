@@ -1,6 +1,8 @@
 package br.com.bootcampinter
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -10,11 +12,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.edit
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.DetailActivity.Companion.EXTRA_CONTACT
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity(), ContactItemClickListener {
     /**
@@ -32,8 +37,8 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
         initDrawer()
         setNavegationViewListener()
+        fetchListContact()
         bindViews()
-        updateList()
     }
 
     private fun initDrawer() {
@@ -49,16 +54,44 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     private fun bindViews() {
         rvList.adapter = adapter
         rvList.layoutManager = LinearLayoutManager(this)
+
+        updateList()
     }
 
-    private fun updateList() {
+    /**
+     * Simula uma chamada de API e salva os dados retornados no SharedPreferences
+     */
+    private fun fetchListContact() {
         val contact1 = Contact("Alison Viana", "(11)00000-0000", R.drawable.male_avatar)
         val contact2 = Contact("Maria José", "(12) 11111-1111", R.drawable.female_avatar)
         val contact3 = Contact("Carlos", "(21) 92222-2222")
 
-        adapter.updateList(
-            arrayListOf(contact1, contact2, contact3)
-        )
+        val list = arrayListOf(contact1, contact2, contact3)
+
+        getInstanceSharedPreference().edit {
+            val json = Gson().toJson(list)
+            putString("Contacts", json)
+            commit()
+        }
+
+    }
+
+    private fun getInstanceSharedPreference() : SharedPreferences {
+        return getSharedPreferences("br.com.boootcampinter.PREFERENCES", Context.MODE_PRIVATE)
+    }
+
+    /**
+     * Recupera os dados salvos no SharedPreferences e converte novamente para uma lista do tipo Contact
+     */
+    private fun getListContacts() : List<Contact> {
+        val list = getInstanceSharedPreference().getString("Contacts", "[]")
+        val turnTypes = object : TypeToken<List<Contact>>() {}.type
+        return  Gson().fromJson(list, turnTypes)
+    }
+
+    private fun updateList() {
+        val list = getListContacts()
+        adapter.updateList(list)
     }
 
     private fun showToast(message: String) {
