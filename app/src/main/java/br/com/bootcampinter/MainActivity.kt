@@ -9,10 +9,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
+import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,14 +34,19 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
     private val adapter = ContactAdapter(this)
 
+    // Falso banco de dados
+    private val dbContacts = DataBaseContacts()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_menu)
 
         initDrawer()
         setNavegationViewListener()
+        initDataBase()
         fetchListContact()
         bindViews()
+        setSearchListeners()
     }
 
     private fun initDrawer() {
@@ -58,15 +66,22 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         updateList()
     }
 
-    /**
-     * Simula uma chamada de API e salva os dados retornados no SharedPreferences
-     */
-    private fun fetchListContact() {
+    private fun initDataBase() {
         val contact1 = Contact("Alison Viana", "(11)00000-0000", R.drawable.male_avatar)
         val contact2 = Contact("Maria José", "(12) 11111-1111", R.drawable.female_avatar)
         val contact3 = Contact("Carlos", "(21) 92222-2222")
 
         val list = arrayListOf(contact1, contact2, contact3)
+
+        dbContacts.addContacts(list)
+    }
+
+
+    /**
+     * Simula uma chamada de API e salva os dados retornados no SharedPreferences
+     */
+    private fun fetchListContact() {
+        val list = dbContacts.dbItems()
 
         getInstanceSharedPreference().edit {
             val json = Gson().toJson(list)
@@ -92,6 +107,31 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     private fun updateList() {
         val list = getListContacts()
         adapter.updateList(list)
+    }
+
+    /**
+     * Métodos responsáveis pelo gerenciamento da barra de busca
+     */
+    private fun setSearchListeners() {
+        val btnSearch = findViewById<ImageView>(R.id.btn_search)
+        val etSearch = findViewById<EditText>(R.id.et_search)
+
+        btnSearch.setOnClickListener {
+            val searchText: String = etSearch.text.toString().lowercase()
+            val filterList = getListContacts().filter {
+                it.name.lowercase().contains(searchText)
+            }
+            adapter.updateList(filterList)
+            if (filterList.isEmpty()) Toast.makeText(
+                this,
+                "Nenhum contato encontrado",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        etSearch.doAfterTextChanged {
+            if (etSearch.text.toString() == "") updateList()
+        }
     }
 
     private fun showToast(message: String) {
