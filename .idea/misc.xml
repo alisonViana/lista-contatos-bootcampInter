@@ -6,12 +6,16 @@
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/drawable/search_button.xml" value="0.2203125" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/activity_main.xml" value="0.21" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_detail.xml" value="0.260233918128655" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_edit.xml" value="0.20416666666666666" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_info_card.xml" value="0.25" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_item.xml" value="0.33" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/drawer_menu.xml" value="0.33" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/new_contact_card.xml" value="0.25" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/search_bar.xml" value="0.25" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/menu/contact_options_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/menu/drawer_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/menu/menu.xml" value="0.33" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/menu/options_menu.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

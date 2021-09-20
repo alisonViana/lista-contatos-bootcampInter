@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Contact(
-    val name: String,
-    val phone: String,
-    val photograph: Int = R.drawable.default_avatar
+    var name: String,
+    var phone: String,
+    var photograph: Int = R.drawable.default_avatar
 ) : Parcelable

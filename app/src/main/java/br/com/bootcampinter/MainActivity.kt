@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.DetailActivity.Companion.EXTRA_CONTACT
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -34,8 +36,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
     private val adapter = ContactAdapter(this)
 
-    // Falso banco de dados
-    private val dbContacts = DataBaseContacts()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +47,12 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         fetchListContact()
         bindViews()
         setSearchListeners()
+        setOnClickListeners()
     }
 
+    /**
+     * Inicializa o drawer menu
+     */
     private fun initDrawer() {
         val drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -59,6 +63,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         toggle.syncState()
     }
 
+
     private fun bindViews() {
         rvList.adapter = adapter
         rvList.layoutManager = LinearLayoutManager(this)
@@ -66,6 +71,9 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         updateList()
     }
 
+    /**
+     * Inicializa os dados no banco de dados falso
+     */
     private fun initDataBase() {
         val contact1 = Contact("Alison Viana", "(11)00000-0000", R.drawable.male_avatar)
         val contact2 = Contact("Maria José", "(12) 11111-1111", R.drawable.female_avatar)
@@ -73,7 +81,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
         val list = arrayListOf(contact1, contact2, contact3)
 
-        dbContacts.addContacts(list)
+        if (DataBaseContacts.dataBaseList.isEmpty()) DataBaseContacts.dataBaseList.addAll(list)
     }
 
 
@@ -81,7 +89,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
      * Simula uma chamada de API e salva os dados retornados no SharedPreferences
      */
     private fun fetchListContact() {
-        val list = dbContacts.dbItems()
+        val list = DataBaseContacts.dataBaseList
 
         getInstanceSharedPreference().edit {
             val json = Gson().toJson(list)
@@ -122,11 +130,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
                 it.name.lowercase().contains(searchText)
             }
             adapter.updateList(filterList)
-            if (filterList.isEmpty()) Toast.makeText(
-                this,
-                "Nenhum contato encontrado",
-                Toast.LENGTH_LONG
-            ).show()
+            if (filterList.isEmpty()) showToast("Nenhum contato encontrado")
         }
 
         etSearch.doAfterTextChanged {
@@ -147,6 +151,9 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         return true
     }
 
+    /**
+     * Função responsável pelo Listener de clique nas opções do options menu
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.item_menu_1 -> {
@@ -161,6 +168,9 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         }
     }
 
+    /**
+     * Função responsável pelo Listener de clique nas opções do drawer menu
+     */
     private fun setNavegationViewListener() {
         val navView = findViewById<NavigationView>(R.id.nav_view)
         navView.setNavigationItemSelectedListener{ item ->
@@ -178,9 +188,32 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         }
     }
 
+    /**
+     * Função responsável por iniciar a activity com os detalhes do contato selecionado
+     */
     override fun onClickItemContact(contact: Contact) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(EXTRA_CONTACT, contact)
         startActivity(intent)
+    }
+
+    /**
+     * Listener do Floating Button, quando pressionado inicializa a nova Activity com a categoria
+     * NEW_CONTACT
+     */
+    private fun setOnClickListeners() {
+        val btnAddContact = findViewById<FloatingActionButton>(R.id.fbtn_add_contact)
+
+        btnAddContact.setOnClickListener {
+            val intent = Intent(this, EditActivity::class.java)
+
+            intent.addCategory(EditActivity.NEW_CONTACT)
+            startActivity(intent)
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        adapter.updateList(DataBaseContacts.dataBaseList)
     }
 }
