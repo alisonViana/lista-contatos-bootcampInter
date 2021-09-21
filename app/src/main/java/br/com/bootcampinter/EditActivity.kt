@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 
 class EditActivity() : AppCompatActivity() {
@@ -11,6 +12,8 @@ class EditActivity() : AppCompatActivity() {
     private var contact: Contact? = null
 
     private var newContactFlag: Boolean = false
+
+    private var indexContact: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class EditActivity() : AppCompatActivity() {
         }
         else{
             contact = intent.getParcelableExtra(EXTRA_CONTACT)
+            indexContact = DataBaseContacts.dataBaseList.indexOf(contact)
             newContactFlag = false
             bindView()
         }
@@ -72,6 +76,7 @@ class EditActivity() : AppCompatActivity() {
      */
     private fun setOnClickListeners() {
         val btnSaveContact = findViewById<Button>(R.id.btn_save_contact)
+        val btnDeleteContact = findViewById<Button>(R.id.btn_delete_contact)
         val etName = findViewById<EditText>(R.id.et_name)
         val etPhone = findViewById<EditText>(R.id.et_phone)
 
@@ -90,6 +95,35 @@ class EditActivity() : AppCompatActivity() {
                 showToast("Contato salvo!")
             }
         }
+
+        btnDeleteContact.setOnClickListener {
+            showAlertDialog()
+        }
+    }
+
+    /**
+     * Cria um AlertDialog e configura as ações dos botões
+     * Caso positivo - deleta o contato e encerra a atividade
+     * Caso negativo - não faz nada
+     */
+    private fun showAlertDialog() {
+        val builder: AlertDialog.Builder = this.let {
+            AlertDialog.Builder(it)
+        }
+
+        builder.apply {
+            setPositiveButton(R.string.ad_positive){_, _ ->
+                DataBaseContacts.dataBaseList.removeAt(indexContact)
+                showToast("Contato Excluido!")
+                finish()
+            }
+            setNegativeButton(R.string.ad_negative, null)
+        }
+
+        builder
+            .setTitle(R.string.ad_delete_contact_title)
+            .setMessage(R.string.ad_delete_contact_text)
+            .show()
     }
 
     private fun showToast(message: String) {

@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Layout
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,6 +23,8 @@ class DetailActivity : AppCompatActivity() {
 
     private var indexContact: Int = 0
 
+    private val listSize: Int = DataBaseContacts.dataBaseList.size
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_detail)
@@ -30,6 +33,7 @@ class DetailActivity : AppCompatActivity() {
         getExtras()
         bindView()
     }
+
 
     private fun initToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -100,6 +104,8 @@ class DetailActivity : AppCompatActivity() {
 
     /**
      * Cria um AlertDialog e configura as ações dos botões
+     * Caso positivo - deleta o contato e encerra a atividade
+     * Caso negativo - não faz nada
      */
     private fun showAlertDialog() {
 
@@ -107,25 +113,34 @@ class DetailActivity : AppCompatActivity() {
             AlertDialog.Builder(it)
         }
         builder.apply {
-            setPositiveButton("Sim") { dialog, id ->
+            setPositiveButton(R.string.ad_positive) { _, _ ->
                 DataBaseContacts.dataBaseList.removeAt(indexContact)
                 showToast("Contato excluído!")
                 finish()
             }
-            setNegativeButton("Não", null)
+            setNegativeButton(R.string.ad_negative, null)
         }
 
         builder
-            .setTitle("Excluir contato")
-            .setMessage("Deseja realmente excluir o contato?")
+            .setTitle(R.string.ad_delete_contact_title)
+            .setMessage(R.string.ad_delete_contact_text)
             .show()
     }
 
 
     override fun onRestart() {
         super.onRestart()
-        contact = DataBaseContacts.dataBaseList[indexContact]
-        bindView()
+        /**
+         * Compara o tamanho da lista de contatos inicial com o tamanho após a chamado do método onRestart()
+         * caso seja igual, Recarrega as informações atualizadas do contato, houve apenas edição
+         * caso seja menor, finaliza a activity, pois houve a exclusão do contato
+         */
+        if (listSize == DataBaseContacts.dataBaseList.size) {
+            contact = DataBaseContacts.dataBaseList[indexContact]
+            bindView()
+        } else {
+            finish()
+        }
     }
 
 
