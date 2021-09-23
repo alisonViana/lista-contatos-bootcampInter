@@ -21,9 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.*
 import br.com.bootcampinter.activitys.DetailActivity.Companion.EXTRA_CONTACT
-import br.com.bootcampinter.contacthelpers.Contact
-import br.com.bootcampinter.contacthelpers.ContactAdapter
-import br.com.bootcampinter.contacthelpers.ContactItemClickListener
+import br.com.bootcampinter.contact.Contact
+import br.com.bootcampinter.contact.ContactAdapter
+import br.com.bootcampinter.contact.ContactItemClickListener
+import br.com.bootcampinter.database.DataBaseContacts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson

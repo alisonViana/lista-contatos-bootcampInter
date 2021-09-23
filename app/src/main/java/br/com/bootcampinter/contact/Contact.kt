@@ -1,4 +1,4 @@
-package br.com.bootcampinter.contacthelpers
+package br.com.bootcampinter.contact
 
 import android.os.Parcelable
 import br.com.bootcampinter.R

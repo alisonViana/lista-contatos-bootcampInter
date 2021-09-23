@@ -12,8 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import br.com.bootcampinter.contacthelpers.Contact
-import br.com.bootcampinter.DataBaseContacts
+import br.com.bootcampinter.contact.Contact
+import br.com.bootcampinter.database.DataBaseContacts
 import br.com.bootcampinter.R
 
 class DetailActivity : AppCompatActivity() {
