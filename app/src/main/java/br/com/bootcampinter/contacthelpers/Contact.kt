@@ -1,6 +1,7 @@
-package br.com.bootcampinter
+package br.com.bootcampinter.contacthelpers
 
 import android.os.Parcelable
+import br.com.bootcampinter.R
 import kotlinx.android.parcel.Parcelize
 
 /**

@@ -1,21 +1,20 @@
-package br.com.bootcampinter
+package br.com.bootcampinter.activitys
 
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.text.Layout
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import br.com.bootcampinter.contacthelpers.Contact
+import br.com.bootcampinter.DataBaseContacts
+import br.com.bootcampinter.R
 
 class DetailActivity : AppCompatActivity() {
 
@@ -109,9 +108,7 @@ class DetailActivity : AppCompatActivity() {
      */
     private fun showAlertDialog() {
 
-        val builder: AlertDialog.Builder = this.let {
-            AlertDialog.Builder(it)
-        }
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 DataBaseContacts.dataBaseList.removeAt(indexContact)

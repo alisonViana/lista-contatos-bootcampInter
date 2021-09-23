@@ -1,4 +1,4 @@
-package br.com.bootcampinter
+package br.com.bootcampinter.activitys
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import br.com.bootcampinter.contacthelpers.Contact
+import br.com.bootcampinter.DataBaseContacts
+import br.com.bootcampinter.R
 
 class EditActivity() : AppCompatActivity() {
 
@@ -107,12 +110,10 @@ class EditActivity() : AppCompatActivity() {
      * Caso negativo - não faz nada
      */
     private fun showAlertDialog() {
-        val builder: AlertDialog.Builder = this.let {
-            AlertDialog.Builder(it)
-        }
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
         builder.apply {
-            setPositiveButton(R.string.ad_positive){_, _ ->
+            setPositiveButton(R.string.ad_positive){ _, _ ->
                 DataBaseContacts.dataBaseList.removeAt(indexContact)
                 showToast("Contato Excluido!")
                 finish()

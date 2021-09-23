@@ -1,4 +1,4 @@
-package br.com.bootcampinter
+package br.com.bootcampinter.contacthelpers
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import br.com.bootcampinter.R
 
 /**
  * Classe responsável por gerenciar a lista de contatos como um todo

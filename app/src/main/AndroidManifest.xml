@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ListaContatosBootcampInter">
         <activity
-            android:name=".EditActivity"
+            android:name=".activitys.EditActivity"
             android:exported="true" />
         <activity
-            android:name=".DetailActivity"
+            android:name=".activitys.DetailActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activitys.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

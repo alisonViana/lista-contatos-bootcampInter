@@ -1,11 +1,10 @@
-package br.com.bootcampinter
+package br.com.bootcampinter.activitys
 
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,7 +19,11 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.com.bootcampinter.DetailActivity.Companion.EXTRA_CONTACT
+import br.com.bootcampinter.*
+import br.com.bootcampinter.activitys.DetailActivity.Companion.EXTRA_CONTACT
+import br.com.bootcampinter.contacthelpers.Contact
+import br.com.bootcampinter.contacthelpers.ContactAdapter
+import br.com.bootcampinter.contacthelpers.ContactItemClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
@@ -58,7 +61,10 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
+            R.string.open_drawer,
+            R.string.close_drawer
+        )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }

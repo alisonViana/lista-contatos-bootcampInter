@@ -1,7 +1,6 @@
 package br.com.bootcampinter
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import br.com.bootcampinter.contacthelpers.Contact
 
 /**
  * Simula um banco de dados para testes
