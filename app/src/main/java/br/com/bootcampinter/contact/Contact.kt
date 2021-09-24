@@ -13,5 +13,6 @@ import kotlinx.android.parcel.Parcelize
 data class Contact(
     var name: String,
     var phone: String,
+    var id: Int? = null,
     var photograph: Int = R.drawable.default_avatar
 ) : Parcelable

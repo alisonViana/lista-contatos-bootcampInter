@@ -15,12 +15,13 @@ import androidx.appcompat.widget.Toolbar
 import br.com.bootcampinter.contact.Contact
 import br.com.bootcampinter.database.DataBaseContacts
 import br.com.bootcampinter.R
+import br.com.bootcampinter.application.ContactApplication
 
 class DetailActivity : AppCompatActivity() {
 
     private var contact: Contact? = null
 
-    private var indexContact: Int = 0
+    private var indexContact: Int = -1
 
     private val listSize: Int = DataBaseContacts.dataBaseList.size
 
@@ -127,6 +128,9 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        contact = ContactApplication.instance.helperDB?.searchContacts(contact?.id)?.get(0)
+        bindView()
+        /*
         /**
          * Compara o tamanho da lista de contatos inicial com o tamanho após a chamado do método onRestart()
          * caso seja igual, Recarrega as informações atualizadas do contato, houve apenas edição
@@ -137,7 +141,7 @@ class DetailActivity : AppCompatActivity() {
             bindView()
         } else {
             finish()
-        }
+        }*/
     }
 
 

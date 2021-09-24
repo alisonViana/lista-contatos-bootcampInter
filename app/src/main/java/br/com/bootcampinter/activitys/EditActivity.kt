@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import br.com.bootcampinter.contact.Contact
 import br.com.bootcampinter.database.DataBaseContacts
 import br.com.bootcampinter.R
+import br.com.bootcampinter.application.ContactApplication
 
 class EditActivity() : AppCompatActivity() {
 
@@ -83,22 +84,26 @@ class EditActivity() : AppCompatActivity() {
         val etName = findViewById<EditText>(R.id.et_name)
         val etPhone = findViewById<EditText>(R.id.et_phone)
 
+        // Listener do botão salvar
         btnSaveContact.setOnClickListener {
             if (etName.text.toString().isNullOrBlank() or etPhone.text.toString().isNullOrBlank()) {
                 showToast("Verifique os dados do contato!")
             } else {
-                val newContact = Contact( etName.text.toString(), etPhone.text.toString())
-
                 if (newContactFlag) {
-                    DataBaseContacts.dataBaseList.add(newContact)
-                } else {
-                    val indexContact = DataBaseContacts.dataBaseList.indexOf(contact)
-                    DataBaseContacts.dataBaseList[indexContact] = newContact
-                    }
+                    val newContact = Contact(etName.text.toString(), etPhone.text.toString())
+                    ContactApplication.instance.helperDB?.newContact(newContact)
+                }
+                else {
+                    val editedContact = Contact(etName.text.toString(), etPhone.text.toString(), contact?.id)
+                    ContactApplication.instance.helperDB?.editContact(editedContact)
+                }
+
                 showToast("Contato salvo!")
+                finish()
             }
         }
 
+        // Listener do botão deletar
         btnDeleteContact.setOnClickListener {
             showAlertDialog()
         }
