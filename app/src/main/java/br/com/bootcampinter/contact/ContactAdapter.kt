@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.R
 
 /**
- * Classe responsável por gerenciar a lista de contatos como um todo
+ * Classe responsável por gerenciar a lista de contatos
  */
 class ContactAdapter(var listener: ContactItemClickListener) : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHolder>() {
 

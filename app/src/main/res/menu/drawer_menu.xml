@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- TODO : Criar as opções do menu -->
     <item
         android:id="@+id/item_menu_1"
         android:title="@string/menu_1"
