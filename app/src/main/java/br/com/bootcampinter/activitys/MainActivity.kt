@@ -93,6 +93,23 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     }
 
     /**
+     * Função responsável pelo Listener de clique nas opções do options menu
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.options_menu_sort_name -> {
+                showToast("Em breve: ordena por nome")
+                return true
+            }
+            R.id.options_menu_sort_id -> {
+                showToast("Em breve: ordena por id")
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
      * Cria um observer para o contactList que é um LiveData
      * quando houver mudanças no contactList, ele atualiza o valor da variável contactList na MainActivity
      * e atualiza as views
@@ -170,24 +187,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         inflater.inflate(R.menu.options_menu, menu)
         return true
     }
-
-    /**
-     * Função responsável pelo Listener de clique nas opções do options menu
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.options_menu_sort_name -> {
-                showToast("Em breve: ordena por nome")
-                return true
-            }
-            R.id.options_menu_sort_id -> {
-                showToast("Em breve: ordena por id")
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
 
     /**
      * Função responsável por iniciar a activity com os detalhes do contato selecionado
