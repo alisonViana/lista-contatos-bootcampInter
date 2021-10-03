@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
         initDrawer()
         setNavigationViewListener()
-        //initDataBase()
         fetchListContact()
         bindViews()
         setSearchListeners()
@@ -89,20 +88,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         }
     }
 
-    /*
-    /**
-     * Inicializa os dados no banco de dados falso
-     */
-    private fun initDataBase() {
-        val contact1 = Contact(0,"Alison Viana", "(11)00000-0000", R.drawable.male_avatar)
-        val contact2 = Contact(0, "Maria José", "(12) 11111-1111", R.drawable.female_avatar)
-        val contact3 = Contact(0, "Carlos", "(21) 92222-2222")
-
-        val list = arrayListOf(contact1, contact2, contact3)
-
-        if (DataBaseContacts.dataBaseList.isEmpty()) DataBaseContacts.dataBaseList.addAll(list)
-    }*/
-
     /**
      * Faz a busca dos contatos no banco de dados
      */
@@ -121,34 +106,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
 
         updateList(contactList)
     }
-
-    /*
-    /**
-     * Simula uma chamada de API e salva os dados retornados no SharedPreferences
-     */
-    private fun fetchListContact() {
-        val list = DataBaseContacts.dataBaseList
-
-        getInstanceSharedPreference().edit {
-            val json = Gson().toJson(list)
-            putString("Contacts", json)
-            commit()
-        }
-
-    }
-
-    private fun getInstanceSharedPreference() : SharedPreferences {
-        return getSharedPreferences("br.com.boootcampinter.PREFERENCES", Context.MODE_PRIVATE)
-    }
-
-    /**
-     * Recupera os dados salvos no SharedPreferences e converte novamente para uma lista do tipo Contact
-     */
-    private fun getListContacts() : List<Contact> {
-        val list = getInstanceSharedPreference().getString("Contacts", "[]")
-        val turnTypes = object : TypeToken<List<Contact>>() {}.type
-        return  Gson().fromJson(list, turnTypes)
-    } */
 
     private fun updateList(list: List<Contact>) {
         //val list = getListContacts()

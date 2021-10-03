@@ -45,7 +45,6 @@ class EditActivity() : AppCompatActivity() {
         }
         else{
             contact = intent.getParcelableExtra(EXTRA_CONTACT)
-            indexContact = DataBaseContacts.dataBaseList.indexOf(contact)
             newContactFlag = false
             bindView()
         }
@@ -105,7 +104,7 @@ class EditActivity() : AppCompatActivity() {
 
         // Listener do botão deletar
         btnDeleteContact.setOnClickListener {
-            showAlertDialog()
+            showAlertDialogDeleteContact()
         }
     }
 
@@ -114,19 +113,17 @@ class EditActivity() : AppCompatActivity() {
      * Caso positivo - deleta o contato e encerra a atividade
      * Caso negativo - não faz nada
      */
-    private fun showAlertDialog() {
+    private fun showAlertDialogDeleteContact() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
         builder.apply {
             setPositiveButton(R.string.ad_positive){ _, _ ->
-                DataBaseContacts.dataBaseList.removeAt(indexContact)
+                ContactApplication.instance.helperDB?.deleteContact(contact?.id)
                 showToast("Contato Excluido!")
                 finish()
             }
             setNegativeButton(R.string.ad_negative, null)
         }
-
-        builder
             .setTitle(R.string.ad_delete_contact_title)
             .setMessage(R.string.ad_delete_contact_text)
             .show()

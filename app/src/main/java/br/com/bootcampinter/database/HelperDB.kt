@@ -91,4 +91,15 @@ class HelperDB(
         db.execSQL(sqlCommand, args)
         db.close()
     }
+
+    fun deleteContact(contactId: Int?) {
+        if (contactId != null ) {
+            val db: SQLiteDatabase = writableDatabase
+            val args = arrayOf("$contactId")
+            val sqlCommand = "DELETE FROM $TABLE_NAME " +
+                    "WHERE $COLUMNS_ID = ?"
+            db.execSQL(sqlCommand, args)
+            db.close()
+        }
+    }
 }

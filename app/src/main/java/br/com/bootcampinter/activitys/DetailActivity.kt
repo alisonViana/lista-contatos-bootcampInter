@@ -21,10 +21,6 @@ class DetailActivity : AppCompatActivity() {
 
     private var contact: Contact? = null
 
-    private var indexContact: Int = -1
-
-    private val listSize: Int = DataBaseContacts.dataBaseList.size
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_detail)
@@ -33,7 +29,6 @@ class DetailActivity : AppCompatActivity() {
         getExtras()
         bindView()
     }
-
 
     private fun initToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -47,7 +42,6 @@ class DetailActivity : AppCompatActivity() {
      */
     private fun getExtras() {
         contact = intent.getParcelableExtra(EXTRA_CONTACT)
-        indexContact = DataBaseContacts.dataBaseList.indexOf(contact)
     }
 
     /**
@@ -59,7 +53,6 @@ class DetailActivity : AppCompatActivity() {
         val ivPhoto = findViewById<ImageView>(R.id.iv_photograph)
 
         tvName.text = contact?.name
-        tvName.visibility = View.VISIBLE
         tvPhone.text = contact?.phone
         ivPhoto.setImageResource(contact!!.photograph)
     }
@@ -90,7 +83,7 @@ class DetailActivity : AppCompatActivity() {
                 return true
             }
             R.id.opt_delete_contact -> {
-                showAlertDialog()
+                showAlertDialogDeleteContact()
                 return true
             }
 
@@ -107,12 +100,12 @@ class DetailActivity : AppCompatActivity() {
      * Caso positivo - deleta o contato e encerra a atividade
      * Caso negativo - não faz nada
      */
-    private fun showAlertDialog() {
+    private fun showAlertDialogDeleteContact() {
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
-                DataBaseContacts.dataBaseList.removeAt(indexContact)
+                ContactApplication.instance.helperDB?.deleteContact(contact?.id)
                 showToast("Contato excluído!")
                 finish()
             }
@@ -125,25 +118,22 @@ class DetailActivity : AppCompatActivity() {
             .show()
     }
 
-
     override fun onRestart() {
         super.onRestart()
-        contact = ContactApplication.instance.helperDB?.searchContacts(contact?.id)?.get(0)
-        bindView()
-        /*
-        /**
-         * Compara o tamanho da lista de contatos inicial com o tamanho após a chamado do método onRestart()
-         * caso seja igual, Recarrega as informações atualizadas do contato, houve apenas edição
-         * caso seja menor, finaliza a activity, pois houve a exclusão do contato
-         */
-        if (listSize == DataBaseContacts.dataBaseList.size) {
-            contact = DataBaseContacts.dataBaseList[indexContact]
-            bindView()
-        } else {
-            finish()
-        }*/
-    }
 
+        /**
+         * Após o retorno para esta activity, busca as informações do contato no banco de dados utilizando o id
+         * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
+         * Caso contrário, atualiza as informações do contato
+         */
+        val contactList: List<Contact> = ContactApplication.instance.helperDB?.searchContacts(contact?.id) ?: mutableListOf()
+
+        if (contactList.isEmpty()) finish()
+        else{
+            contact = contactList[0]
+            bindView()
+        }
+    }
 
     companion object {
         const val EXTRA_CONTACT: String = "EXTRA_CONTACT"
