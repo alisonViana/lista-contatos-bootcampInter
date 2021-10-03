@@ -9,11 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.*
@@ -22,7 +24,7 @@ import br.com.bootcampinter.application.ContactApplication
 import br.com.bootcampinter.contact.Contact
 import br.com.bootcampinter.contact.ContactAdapter
 import br.com.bootcampinter.contact.ContactItemClickListener
-import br.com.bootcampinter.database.DataBaseContacts
+import br.com.bootcampinter.viewmodel.ContactListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -33,20 +35,23 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     private val rvList: RecyclerView by lazy {
         findViewById(R.id.rv_list)
     }
-
     private val adapter = ContactAdapter(this)
-
+    private lateinit var contactListViewModel: ContactListViewModel
     private var contactList: List<Contact> = mutableListOf()
+
+    private lateinit var progressBar: ProgressBar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_menu)
 
+        contactListViewModel = ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
+
         initDrawer()
         setNavigationViewListener()
+        initObserver()
         fetchListContact()
-        bindViews()
         setSearchListeners()
         setOnClickNewContactListener()
     }
@@ -66,7 +71,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
-
 
     /**
      * Função responsável pelo Listener dos cliques nas opções do drawer menu
@@ -89,26 +93,47 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     }
 
     /**
-     * Faz a busca dos contatos no banco de dados
+     * Cria um observer para o contactList que é um LiveData
+     * quando houver mudanças no contactList, ele atualiza o valor da variável contactList na MainActivity
+     * e atualiza as views
      */
-    private fun fetchListContact() {
-        try {
-            contactList = ContactApplication.instance.helperDB?.searchContacts() ?: mutableListOf()
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+    private fun initObserver() {
+        contactListViewModel.contactList.observe(this, {list ->
+            contactList = list
+            bindViews()
+        })
     }
 
+    /**
+     * Faz a busca dos contatos no banco de dados
+     * Toda consulta ao banco de dados deve ser feita dentro de Try-Catch
+     * e fora da Thread principal
+     * O resultado da busca esta sendo salvo em uma variável do tipo liveData
+     */
+    private fun fetchListContact() {
+        contactList = mutableListOf()
+        progressBar = findViewById(R.id.progress_bar)
+        progressBar.visibility = View.VISIBLE
+
+        Thread{
+            try {
+                Thread.sleep(300)
+                contactListViewModel.contactList.postValue(ContactApplication.instance.helperDB?.searchContacts() ?: mutableListOf())
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }.start()
+    }
 
     private fun bindViews() {
         rvList.adapter = adapter
         rvList.layoutManager = LinearLayoutManager(this)
 
+        progressBar.visibility = View.INVISIBLE
         updateList(contactList)
     }
 
     private fun updateList(list: List<Contact>) {
-        //val list = getListContacts()
         adapter.updateList(list)
     }
 

@@ -105,9 +105,11 @@ class DetailActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
-                ContactApplication.instance.helperDB?.deleteContact(contact?.id)
-                showToast("Contato excluído!")
-                finish()
+                try {
+                    ContactApplication.instance.helperDB?.deleteContact(contact?.id)
+                    showToast("Contato excluído!")
+                    finish()
+                } catch (ex: Exception) { showToast(ex.toString()) }
             }
             setNegativeButton(R.string.ad_negative, null)
         }
@@ -126,7 +128,10 @@ class DetailActivity : AppCompatActivity() {
          * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
          * Caso contrário, atualiza as informações do contato
          */
-        val contactList: List<Contact> = ContactApplication.instance.helperDB?.searchContacts(contact?.id) ?: mutableListOf()
+        var contactList: List<Contact> = arrayListOf()
+        try {
+            contactList = ContactApplication.instance.helperDB?.searchContacts(contact?.id) ?: mutableListOf()
+        } catch (ex: Exception) { showToast(ex.toString()) }
 
         if (contactList.isEmpty()) finish()
         else{

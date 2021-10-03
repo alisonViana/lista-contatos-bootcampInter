@@ -14,10 +14,7 @@ import br.com.bootcampinter.application.ContactApplication
 class EditActivity() : AppCompatActivity() {
 
     private var contact: Contact? = null
-
     private var newContactFlag: Boolean = false
-
-    private var indexContact: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,11 +87,15 @@ class EditActivity() : AppCompatActivity() {
             } else {
                 if (newContactFlag) {
                     val newContact = Contact(etName.text.toString(), etPhone.text.toString())
-                    ContactApplication.instance.helperDB?.newContact(newContact)
+                    try{
+                        ContactApplication.instance.helperDB?.newContact(newContact)
+                    } catch (ex: Exception){ showToast(ex.toString()) }
                 }
                 else {
                     val editedContact = Contact(etName.text.toString(), etPhone.text.toString(), contact?.id)
-                    ContactApplication.instance.helperDB?.editContact(editedContact)
+                    try {
+                        ContactApplication.instance.helperDB?.editContact(editedContact)
+                    } catch (ex: Exception){ showToast(ex.toString()) }
                 }
 
                 showToast("Contato salvo!")
@@ -118,9 +119,11 @@ class EditActivity() : AppCompatActivity() {
 
         builder.apply {
             setPositiveButton(R.string.ad_positive){ _, _ ->
-                ContactApplication.instance.helperDB?.deleteContact(contact?.id)
-                showToast("Contato Excluido!")
-                finish()
+                try {
+                    ContactApplication.instance.helperDB?.deleteContact(contact?.id)
+                    showToast("Contato Excluido!")
+                    finish()
+                } catch (ex: Exception){ showToast(ex.toString()) }
             }
             setNegativeButton(R.string.ad_negative, null)
         }
