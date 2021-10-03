@@ -3,12 +3,12 @@
 
     <!-- TODO : Criar as opções do menu -->
     <item
-        android:id="@+id/item_menu_1"
-        android:title="@string/menu_1"
+        android:id="@+id/menu_about_app"
+        android:title="@string/about_app"
         android:icon="@android:drawable/ic_menu_help" />
 
     <item
-        android:id="@+id/item_menu_2"
-        android:title="@string/menu_2"
-        android:icon="@android:drawable/ic_menu_share" />
+        android:id="@+id/menu_about_dev"
+        android:title="@string/about_dev"
+        android:icon="@android:drawable/ic_menu_myplaces" />
 </menu>

@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <!-- TODO : Criar as opções do menu -->
     <item
-        android:id="@+id/item_menu_1"
-        android:title="@string/menu_1" />
+        android:id="@+id/options_menu_sort_name"
+        android:title="@string/sort_name" />
 
-    <item android:id="@+id/item_menu_2"
-        android:title="@string/menu_2"/>
+    <item android:id="@+id/options_menu_sort_id"
+        android:title="@string/sort_id"/>
 </menu>

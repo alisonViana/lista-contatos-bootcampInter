@@ -79,12 +79,12 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         val navView = findViewById<NavigationView>(R.id.nav_view)
         navView.setNavigationItemSelectedListener{ item ->
             when(item.itemId){
-                R.id.item_menu_1 -> {
-                    showToast("MENU 1")
+                R.id.menu_about_app -> {
+                    showToast("Em breve: Sobre o app")
                     true
                 }
-                R.id.item_menu_2 -> {
-                    showToast("MENU 2")
+                R.id.menu_about_dev -> {
+                    showToast("Em breve: Sobre o desenvolvedor")
                     true
                 }
                 else -> { false }
@@ -176,12 +176,12 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.item_menu_1 -> {
-                showToast("Selecionado o item 1")
+            R.id.options_menu_sort_name -> {
+                showToast("Em breve: ordena por nome")
                 return true
             }
-            R.id.item_menu_2 -> {
-                showToast("Selecionado o item 2")
+            R.id.options_menu_sort_id -> {
+                showToast("Em breve: ordena por id")
                 return true
             }
             else -> super.onOptionsItemSelected(item)

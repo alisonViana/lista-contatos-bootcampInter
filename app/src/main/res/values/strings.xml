@@ -3,10 +3,12 @@
     <string name="iv_photo_content_description">Imagem do Contato</string>
 
     <!-- menu texts -->
-    <string name="menu_1">Menu 1</string>
-    <string name="menu_2">Menu 2</string>
+    <string name="about_app">Sobre o app</string>
+    <string name="about_dev">Sobre o desenvolvedor</string>
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Fechar</string>
+    <string name="sort_name">Ordenar por nome</string>
+    <string name="sort_id">Ordenar por ID</string>
 
     <string name="save_contact">Salvar contato</string>
     <string name="delete_contact">Excluir Contato</string>
