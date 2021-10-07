@@ -6,26 +6,29 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import br.com.bootcampinter.contact.Contact
-import br.com.bootcampinter.database.DataBaseContacts
 import br.com.bootcampinter.R
-import br.com.bootcampinter.application.ContactApplication
+import br.com.bootcampinter.viewmodel.ContactListViewModel
 
 class DetailActivity : AppCompatActivity() {
 
     private var contact: Contact? = null
+
+    private val contactListViewModel: ContactListViewModel =
+        ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_detail)
 
         initToolbar()
+        initObserver()
         getExtras()
         bindView()
     }
@@ -34,6 +37,21 @@ class DetailActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    /**
+     * Após o retorno para esta activity, busca as informações do contato no banco de dados utilizando o id
+     * quando houver mudanças no contactList, o método observer é chamado com a lista de contatos atualizada
+     * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
+     * Caso contrário, atualiza as informações do contato
+     */
+    private fun initObserver() {
+        contactListViewModel.contactList.observe(this, {
+            if (it.isNotEmpty()){
+                contact = it[0]
+                bindView()
+            } else finish()
+        })
     }
 
     /**
@@ -106,7 +124,8 @@ class DetailActivity : AppCompatActivity() {
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 try {
-                    ContactApplication.instance.helperDB?.deleteContact(contact?.id)
+                    contactListViewModel.deleteContact(contact?.id)
+                    //ContactApplication.instance.helperDB?.deleteContact(contact?.id)
                     showToast("Contato excluído!")
                     finish()
                 } catch (ex: Exception) { showToast(ex.toString()) }
@@ -122,22 +141,13 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-
         /**
          * Após o retorno para esta activity, busca as informações do contato no banco de dados utilizando o id
+         * quando houver mudanças no contactList, o método observer é chamado com a lista de contatos atualizada
          * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
          * Caso contrário, atualiza as informações do contato
          */
-        var contactList: List<Contact> = arrayListOf()
-        try {
-            contactList = ContactApplication.instance.helperDB?.searchContacts(contact?.id) ?: mutableListOf()
-        } catch (ex: Exception) { showToast(ex.toString()) }
-
-        if (contactList.isEmpty()) finish()
-        else{
-            contact = contactList[0]
-            bindView()
-        }
+        contactListViewModel.getContactList(contact?.id)
     }
 
     companion object {

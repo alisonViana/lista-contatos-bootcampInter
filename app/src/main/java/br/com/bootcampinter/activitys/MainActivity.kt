@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.bootcampinter.*
 import br.com.bootcampinter.activitys.DetailActivity.Companion.EXTRA_CONTACT
-import br.com.bootcampinter.application.ContactApplication
 import br.com.bootcampinter.contact.Contact
 import br.com.bootcampinter.contact.ContactAdapter
 import br.com.bootcampinter.contact.ContactItemClickListener
@@ -36,7 +35,10 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         findViewById(R.id.rv_list)
     }
     private val adapter = ContactAdapter(this)
-    private lateinit var contactListViewModel: ContactListViewModel
+
+    private val contactListViewModel: ContactListViewModel =
+        ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
+
     private var contactList: List<Contact> = mutableListOf()
 
     private lateinit var progressBar: ProgressBar
@@ -45,8 +47,6 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_menu)
-
-        contactListViewModel = ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
 
         initDrawer()
         setNavigationViewListener()
@@ -132,14 +132,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
         progressBar = findViewById(R.id.progress_bar)
         progressBar.visibility = View.VISIBLE
 
-        Thread{
-            try {
-                Thread.sleep(300)
-                contactListViewModel.contactList.postValue(ContactApplication.instance.helperDB?.searchContacts() ?: mutableListOf())
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }.start()
+        contactListViewModel.getContactList()
     }
 
     private fun bindViews() {
@@ -168,6 +161,7 @@ class MainActivity : AppCompatActivity(), ContactItemClickListener {
             }
             updateList(filteredList)
             if (filteredList.isEmpty()) showToast("Nenhum contato encontrado")
+            else showToast("Encontrados ${filteredList.size} contato(s)")
         }
 
         etSearch.doAfterTextChanged {

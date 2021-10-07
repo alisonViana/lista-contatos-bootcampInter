@@ -6,15 +6,17 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import br.com.bootcampinter.contact.Contact
-import br.com.bootcampinter.database.DataBaseContacts
 import br.com.bootcampinter.R
-import br.com.bootcampinter.application.ContactApplication
+import br.com.bootcampinter.viewmodel.ContactListViewModel
 
 class EditActivity() : AppCompatActivity() {
 
     private var contact: Contact? = null
     private var newContactFlag: Boolean = false
+    private val contactListViewModel: ContactListViewModel =
+        ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,15 +89,11 @@ class EditActivity() : AppCompatActivity() {
             } else {
                 if (newContactFlag) {
                     val newContact = Contact(etName.text.toString(), etPhone.text.toString())
-                    try{
-                        ContactApplication.instance.helperDB?.newContact(newContact)
-                    } catch (ex: Exception){ showToast(ex.toString()) }
+                    contactListViewModel.addContact(newContact)
                 }
                 else {
                     val editedContact = Contact(etName.text.toString(), etPhone.text.toString(), contact?.id)
-                    try {
-                        ContactApplication.instance.helperDB?.editContact(editedContact)
-                    } catch (ex: Exception){ showToast(ex.toString()) }
+                    contactListViewModel.editContact(editedContact)
                 }
 
                 showToast("Contato salvo!")
@@ -119,11 +117,9 @@ class EditActivity() : AppCompatActivity() {
 
         builder.apply {
             setPositiveButton(R.string.ad_positive){ _, _ ->
-                try {
-                    ContactApplication.instance.helperDB?.deleteContact(contact?.id)
-                    showToast("Contato Excluido!")
-                    finish()
-                } catch (ex: Exception){ showToast(ex.toString()) }
+                contactListViewModel.deleteContact(contact?.id)
+                showToast("Contato Excluido!")
+                finish()
             }
             setNegativeButton(R.string.ad_negative, null)
         }
