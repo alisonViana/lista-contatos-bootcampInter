@@ -125,7 +125,6 @@ class DetailActivity : AppCompatActivity() {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 try {
                     contactListViewModel.deleteContact(contact?.id)
-                    //ContactApplication.instance.helperDB?.deleteContact(contact?.id)
                     showToast("Contato excluído!")
                     finish()
                 } catch (ex: Exception) { showToast(ex.toString()) }
