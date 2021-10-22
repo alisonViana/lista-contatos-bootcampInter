@@ -1,5 +1,6 @@
 package br.com.bootcampinter.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +11,16 @@ import kotlinx.coroutines.launch
 
 class ContactListViewModel: ViewModel() {
 
-    val contactList = MutableLiveData<List<Contact>>()
+    private val _contactList = MutableLiveData<List<Contact>>()
+    val contactList: LiveData<List<Contact>>
+    get() = _contactList
 
     fun getContactList(contactId: Int? = null){
         // Cria uma nova corrotina e move a execução para fora da Thread principal
         viewModelScope.launch(Dispatchers.IO) {
             Thread.sleep(300) // Tempo de simulação de requisição
             try {
-                contactList.postValue(ContactApplication.instance.helperDB?.searchContacts(contactId))
+                _contactList.postValue(ContactApplication.instance.helperDB?.searchContacts(contactId))
             }catch (ex: Exception) {ex.printStackTrace()}
         }
     }
@@ -48,7 +51,5 @@ class ContactListViewModel: ViewModel() {
             }catch (ex: Exception) {ex.printStackTrace()}
         }
     }
-
-
 
 }
