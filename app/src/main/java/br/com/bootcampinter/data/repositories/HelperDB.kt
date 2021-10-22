@@ -1,10 +1,10 @@
-package br.com.bootcampinter.database
+package br.com.bootcampinter.data.repositories
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import br.com.bootcampinter.contact.Contact
+import br.com.bootcampinter.data.model.Contact
 
 class HelperDB(
     context: Context

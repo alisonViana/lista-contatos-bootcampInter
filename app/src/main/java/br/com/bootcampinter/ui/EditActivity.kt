@@ -1,4 +1,4 @@
-package br.com.bootcampinter.activitys
+package br.com.bootcampinter.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,16 +7,16 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import br.com.bootcampinter.contact.Contact
+import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.R
-import br.com.bootcampinter.viewmodel.ContactListViewModel
+import br.com.bootcampinter.presentation.MainViewModel
 
 class EditActivity() : AppCompatActivity() {
-
+/*
     private var contact: Contact? = null
     private var newContactFlag: Boolean = false
-    private val contactListViewModel: ContactListViewModel =
-        ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
+    private val mainViewModel: MainViewModel =
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,12 +88,12 @@ class EditActivity() : AppCompatActivity() {
                 showToast("Verifique os dados do contato!")
             } else {
                 if (newContactFlag) {
-                    val newContact = Contact(etName.text.toString(), etPhone.text.toString())
-                    contactListViewModel.addContact(newContact)
+                    // TODO val newContact = Contact(etName.text.toString(), etPhone.text.toString())
+                    // TODO mainViewModel.addContact(newContact)
                 }
                 else {
-                    val editedContact = Contact(etName.text.toString(), etPhone.text.toString(), contact?.id)
-                    contactListViewModel.editContact(editedContact)
+                    // TODO val editedContact = Contact(etName.text.toString(), etPhone.text.toString(), contact?.id)
+                    // TODO mainViewModel.editContact(editedContact)
                 }
 
                 showToast("Contato salvo!")
@@ -117,7 +117,7 @@ class EditActivity() : AppCompatActivity() {
 
         builder.apply {
             setPositiveButton(R.string.ad_positive){ _, _ ->
-                contactListViewModel.deleteContact(contact?.id)
+                // TODO mainViewModel.deleteContact(contact?.id)
                 showToast("Contato Excluido!")
                 finish()
             }
@@ -136,4 +136,6 @@ class EditActivity() : AppCompatActivity() {
         const val EXTRA_CONTACT: String = "EXTRA_CONTACT"
         const val NEW_CONTACT: String = "NEW_CONTACT"
     }
+
+ */
 }

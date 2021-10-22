@@ -1,4 +1,4 @@
-package br.com.bootcampinter.activitys
+package br.com.bootcampinter.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,16 +12,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import br.com.bootcampinter.contact.Contact
+import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.R
-import br.com.bootcampinter.viewmodel.ContactListViewModel
+import br.com.bootcampinter.presentation.MainViewModel
 
 class DetailActivity : AppCompatActivity() {
-
+/*
     private var contact: Contact? = null
 
-    private val contactListViewModel: ContactListViewModel =
-        ViewModelProvider.NewInstanceFactory().create(ContactListViewModel::class.java)
+    private val mainViewModel: MainViewModel =
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
      * Caso contrário, atualiza as informações do contato
      */
     private fun initObserver() {
-        contactListViewModel.contactList.observe(this, {
+        mainViewModel.contactList.observe(this, {
             if (it.isNotEmpty()){
                 contact = it[0]
                 bindView()
@@ -124,7 +124,7 @@ class DetailActivity : AppCompatActivity() {
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 try {
-                    contactListViewModel.deleteContact(contact?.id)
+                    //TODO - mainViewModel.deleteContact(contact)
                     showToast("Contato excluído!")
                     finish()
                 } catch (ex: Exception) { showToast(ex.toString()) }
@@ -146,10 +146,12 @@ class DetailActivity : AppCompatActivity() {
          * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
          * Caso contrário, atualiza as informações do contato
          */
-        contactListViewModel.getContactList(contact?.id)
+        // TODO - mainViewModel.getContactList(contact?.id)
     }
 
     companion object {
         const val EXTRA_CONTACT: String = "EXTRA_CONTACT"
     }
+
+ */
 }
