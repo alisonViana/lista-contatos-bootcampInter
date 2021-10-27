@@ -35,7 +35,7 @@
             android:singleLine="true"
             android:inputType="phone"
             android:autofillHints="phone"
-            android:hint="(00) 00000-0000"/>
+            android:hint="@string/hint_phone_number"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

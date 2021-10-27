@@ -19,4 +19,5 @@
     <string name="ad_negative">Não</string>
     <string name="ad_delete_contact_title">Excluir contato?</string>
     <string name="ad_delete_contact_text">Deseja realemente excluir o contato?</string>
+    <string name="hint_phone_number">00 00000-0000</string>
 </resources>
