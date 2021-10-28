@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.widget.doAfterTextChanged
 import br.com.bootcampinter.*
-import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.databinding.DrawerMenuBinding
 import br.com.bootcampinter.presentation.MainViewModel
 import br.com.bootcampinter.ui.DetailActivity.Companion.EXTRA_CONTACT
@@ -16,8 +15,6 @@ import br.com.bootcampinter.ui.EditActivity.Companion.NEW_CONTACT
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-
-    private var contactList: List<Contact> = mutableListOf()
 
     private val viewModel by viewModel<MainViewModel>()
     private val adapter by lazy { ContactListAdapter()}
@@ -75,18 +72,28 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setSearchListeners() {
 
+        // Listener do botão de pesquisa
         binding.activityMain.searchBar.btnSearch.setOnClickListener {
             val searchText: String = binding.activityMain.searchBar.etSearch.text.toString().lowercase()
-            val filteredList = contactList.filter {
-                it.name.lowercase().contains(searchText)
+
+            viewModel.getContactList().observe(this){ list ->
+                list.filter { contact ->
+                    contact.name.lowercase().contains(searchText)
+                }.let {
+                    adapter.submitList(it)
+                    viewModel.setFilteredList(it)
+                }
             }
-            //TODO - updateList(filteredList)
-            if (filteredList.isEmpty()) showToast("Nenhum contato encontrado")
-            else showToast("Encontrado ${filteredList.size} contato(s)")
+            binding.activityMain.searchBar.etSearch.clearFocus()
         }
 
+        // Listener chamado quando é limpa a barra de pesquisa
         binding.activityMain.searchBar.etSearch.doAfterTextChanged {
-            if (binding.activityMain.searchBar.etSearch.text.toString() == "") true // TODO - updateList(contactList)
+            if (binding.activityMain.searchBar.etSearch.text.toString() == "") {
+                binding.activityMain.searchBar.etSearch.clearFocus()
+                viewModel.cleanFilteredList()
+                fetchListContact()
+            }
         }
     }
 
@@ -148,10 +155,14 @@ class MainActivity : AppCompatActivity() {
     private fun fetchListContact() {
         binding.activityMain.progressBar.visibility = View.VISIBLE
 
-        viewModel.getContactList().observe(this){ list ->
-            adapter.submitList(list)
-            binding.activityMain.progressBar.visibility = View.INVISIBLE
+        if (!viewModel.getFilteredStatus()) {
+            viewModel.getContactList().observe(this){ list ->
+                adapter.submitList(list)
+            }
         }
+        else adapter.submitList(viewModel.getFilteredList())
+
+        binding.activityMain.progressBar.visibility = View.INVISIBLE
     }
 
     private fun showToast(message: String) {
