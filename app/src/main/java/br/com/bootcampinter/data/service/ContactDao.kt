@@ -10,14 +10,14 @@ import br.com.bootcampinter.data.model.Contact
 @Dao
 interface ContactDao {
 
-    @Query("SELECT * FROM CONTACT")
-    fun getAll(): List<Contact>
+    @Query("SELECT * FROM Contact")
+    fun getAll(): LiveData<List<Contact>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(contact: Contact)
 
-    @Update
-    suspend fun update(contact: Contact)
+    @Query("UPDATE Contact SET name = :name, phone = :phone WHERE id = :id")
+    suspend fun update(id: Int, name: String, phone: String)
 
     @Delete
     suspend fun delete(contact: Contact)

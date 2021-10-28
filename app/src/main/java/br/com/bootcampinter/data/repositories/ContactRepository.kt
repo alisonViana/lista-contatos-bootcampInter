@@ -11,7 +11,9 @@ import kotlinx.coroutines.runBlocking
  */
 class ContactRepository(private val dao: ContactDao) {
 
-    fun getAll() = dao.getAll()
+    fun getAll() = runBlocking{
+        dao.getAll()
+    }
 
     fun insert(contact: Contact)  = runBlocking {
         launch(Dispatchers.IO) {
@@ -24,7 +26,7 @@ class ContactRepository(private val dao: ContactDao) {
     fun update(contact: Contact) = runBlocking {
         launch(Dispatchers.IO){
             try {
-                dao.update(contact)
+                dao.update(contact.id, contact.name, contact.phone)
             } catch (ex: Exception) {ex.printStackTrace()}
         }
     }
