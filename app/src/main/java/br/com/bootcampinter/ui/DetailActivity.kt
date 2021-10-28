@@ -1,57 +1,53 @@
 package br.com.bootcampinter.ui
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.R
+import br.com.bootcampinter.databinding.ContactDetailBinding
 import br.com.bootcampinter.presentation.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity() {
-/*
-    private var contact: Contact? = null
 
-    private val mainViewModel: MainViewModel =
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    private var contact: Contact? = null
+    private var startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            contact = result.data?.getParcelableExtra(EXTRA_CONTACT)
+            bindView()
+        }
+        else finish()
+    }
+
+    private val viewModel by viewModel<MainViewModel>()
+    private val binding by lazy { ContactDetailBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.contact_detail)
+        setContentView(binding.root)
 
         initToolbar()
-        initObserver()
+        //initObserver()
         getExtras()
         bindView()
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    /**
-     * Após o retorno para esta activity, busca as informações do contato no banco de dados utilizando o id
-     * quando houver mudanças no contactList, o método observer é chamado com a lista de contatos atualizada
-     * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
-     * Caso contrário, atualiza as informações do contato
-     */
-    private fun initObserver() {
-        mainViewModel.contactList.observe(this, {
-            if (it.isNotEmpty()){
-                contact = it[0]
-                bindView()
-            } else finish()
-        })
     }
 
     /**
@@ -66,13 +62,9 @@ class DetailActivity : AppCompatActivity() {
      * Seta as informações do contato nas views correspondentes
      */
     private fun bindView() {
-        val tvName = findViewById<TextView>(R.id.tv_name)
-        val tvPhone = findViewById<TextView>(R.id.tv_phone)
-        val ivPhoto = findViewById<ImageView>(R.id.iv_photograph)
-
-        tvName.text = contact?.name
-        tvPhone.text = contact?.phone
-        ivPhoto.setImageResource(contact!!.photograph)
+        binding.contactInfoCard.tvName.text = contact?.name
+        binding.contactInfoCard.tvPhone.text = contact?.phone
+        binding.ivPhotograph.setImageResource(contact!!.photograph)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -84,7 +76,6 @@ class DetailActivity : AppCompatActivity() {
      * Função responsável pela criação do Options Menu
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuInflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.contact_options_menu, menu)
         return true
     }
@@ -95,9 +86,13 @@ class DetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.opt_edit_contact -> {
-                val intent = Intent(this, EditActivity::class.java)
-                intent.putExtra(EXTRA_CONTACT, contact)
-                startActivity(intent)
+                //val intent = Intent(this, EditActivity::class.java)
+                //intent.putExtra(EXTRA_CONTACT, contact)
+                //startActivity(intent)
+                Intent(this, EditActivity::class.java).apply {
+                    putExtra(EXTRA_CONTACT,contact)
+                    startForResult.launch(this)
+                }
                 return true
             }
             R.id.opt_delete_contact -> {
@@ -124,7 +119,7 @@ class DetailActivity : AppCompatActivity() {
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 try {
-                    //TODO - mainViewModel.deleteContact(contact)
+                    viewModel.deleteContact(contact!!)
                     showToast("Contato excluído!")
                     finish()
                 } catch (ex: Exception) { showToast(ex.toString()) }
@@ -138,20 +133,7 @@ class DetailActivity : AppCompatActivity() {
             .show()
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        /**
-         * Após o retorno para esta activity, busca as informações do contato no banco de dados utilizando o id
-         * quando houver mudanças no contactList, o método observer é chamado com a lista de contatos atualizada
-         * Caso a lista retornada esteja vazia, significa que o contato foi deletado e finaliza a activity
-         * Caso contrário, atualiza as informações do contato
-         */
-        // TODO - mainViewModel.getContactList(contact?.id)
-    }
-
     companion object {
         const val EXTRA_CONTACT: String = "EXTRA_CONTACT"
     }
-
- */
 }

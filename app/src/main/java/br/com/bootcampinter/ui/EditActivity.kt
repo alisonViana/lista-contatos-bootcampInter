@@ -1,5 +1,6 @@
 package br.com.bootcampinter.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -86,6 +87,10 @@ class EditActivity() : AppCompatActivity() {
                         name = binding.newContactCard.etName.text.toString(),
                         phone = binding.newContactCard.etPhone.text.toString())
                     viewModel.editContact(editedContact)
+                    Intent().apply {
+                        putExtra(EXTRA_CONTACT, editedContact)
+                        setResult(RESULT_OK, this)
+                    }
                 }
                 showToast("Contato salvo!")
                 finish()
