@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout-land/contact_datail.xml" value="0.1728395061728395" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout-land/contact_detail.xml" value="0.22" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout-land/contact_edit.xml" value="0.1728395061728395" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout-land/contact_edit_horizontal.xml" value="0.1728395061728395" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_detail.xml" value="0.16621376811594202" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_edit.xml" value="0.16621376811594202" />
+        <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_edit_horizontal.xml" value="0.20416666666666666" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_info_card.xml" value="0.16621376811594202" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/contact_item.xml" value="0.16621376811594202" />
         <entry key="..\:/Documentos/Programacao_Android/DIO/listaContatosBootcampInter/app/src/main/res/layout/new_contact_card.xml" value="0.16621376811594202" />

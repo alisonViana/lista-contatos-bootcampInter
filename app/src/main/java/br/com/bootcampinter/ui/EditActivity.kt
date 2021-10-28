@@ -10,14 +10,14 @@ import androidx.appcompat.app.AlertDialog
 import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.R
 import br.com.bootcampinter.databinding.ContactEditBinding
-import br.com.bootcampinter.presentation.MainViewModel
+import br.com.bootcampinter.presentation.EditViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditActivity() : AppCompatActivity() {
 
     private var contact: Contact? = null
     private var newContactFlag: Boolean = false
-    private val viewModel by viewModel<MainViewModel>()
+    private val viewModel by viewModel<EditViewModel>()
     private val binding by lazy { ContactEditBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,24 +7,12 @@ import br.com.bootcampinter.data.repositories.ContactRepository
 
 class MainViewModel(private val contactRepository: ContactRepository): ViewModel() {
 
+    private var filteredStatus: Boolean = false
+    private var filteredList: List<Contact> = listOf()
+
     fun getContactList(): LiveData<List<Contact>> {
         return contactRepository.getAll()
     }
-
-    fun addContact(contact: Contact){
-        contactRepository.insert(contact)
-    }
-
-    fun editContact(contact: Contact) {
-        contactRepository.update(contact)
-    }
-
-    fun deleteContact(contact: Contact){
-        contactRepository.delete(contact)
-    }
-
-    private var filteredStatus: Boolean = false
-    private var filteredList: List<Contact> = listOf()
 
     fun setFilteredList(list: List<Contact>) {
         filteredList = list

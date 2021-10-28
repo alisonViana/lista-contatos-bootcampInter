@@ -4,35 +4,30 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import br.com.bootcampinter.data.model.Contact
 import br.com.bootcampinter.R
 import br.com.bootcampinter.databinding.ContactDetailBinding
-import br.com.bootcampinter.presentation.MainViewModel
+import br.com.bootcampinter.presentation.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity() {
 
-    private var contact: Contact? = null
+    private val blankContact: Contact = Contact(-1, "Contato", "000000000")
+
     private var startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){ result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            contact = result.data?.getParcelableExtra(EXTRA_CONTACT)
+            viewModel.setContact(result.data?.getParcelableExtra(EXTRA_CONTACT) ?: blankContact)
             bindView()
         }
         else finish()
     }
-
-    private val viewModel by viewModel<MainViewModel>()
+    private val viewModel by viewModel<DetailViewModel>()
     private val binding by lazy { ContactDetailBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +35,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initToolbar()
-        //initObserver()
-        getExtras()
+        if (viewModel.initExtras()) getExtras()
         bindView()
     }
 
@@ -55,16 +49,16 @@ class DetailActivity : AppCompatActivity() {
      * activitys que a iniciou
      */
     private fun getExtras() {
-        contact = intent.getParcelableExtra(EXTRA_CONTACT)
+        viewModel.setContact(intent.getParcelableExtra(EXTRA_CONTACT) ?: blankContact)
     }
 
     /**
      * Seta as informações do contato nas views correspondentes
      */
     private fun bindView() {
-        binding.contactInfoCard.tvName.text = contact?.name
-        binding.contactInfoCard.tvPhone.text = contact?.phone
-        binding.ivPhotograph.setImageResource(contact!!.photograph)
+        binding.contactInfoCard.tvName.text = viewModel.getContact().name
+        binding.contactInfoCard.tvPhone.text = viewModel.getContact().phone
+        binding.ivPhotograph.setImageResource(viewModel.getContact().photograph)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -86,11 +80,8 @@ class DetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.opt_edit_contact -> {
-                //val intent = Intent(this, EditActivity::class.java)
-                //intent.putExtra(EXTRA_CONTACT, contact)
-                //startActivity(intent)
                 Intent(this, EditActivity::class.java).apply {
-                    putExtra(EXTRA_CONTACT,contact)
+                    putExtra(EXTRA_CONTACT, viewModel.getContact())
                     startForResult.launch(this)
                 }
                 return true
@@ -119,7 +110,7 @@ class DetailActivity : AppCompatActivity() {
         builder.apply {
             setPositiveButton(R.string.ad_positive) { _, _ ->
                 try {
-                    viewModel.deleteContact(contact!!)
+                    viewModel.deleteContact(viewModel.getContact())
                     showToast("Contato excluído!")
                     finish()
                 } catch (ex: Exception) { showToast(ex.toString()) }
